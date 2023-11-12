@@ -57,15 +57,15 @@ fn prompt(rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>, p: &s
 /// # Arguments
 /// * `rl` - Rustyline [Editor](rustyline::Editor) used to read user's input.
 /// * `p` - User prompt given to the user to signal the need for input.
-fn prompt_i32(rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>, p: &str) -> i32 {
+fn prompt_u32(rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>, p: &str) -> u32 {
     loop {
         let input_string = prompt(rl, p);
-        match input_string.parse::<i32>() {
+        match input_string.parse::<u32>() {
             Ok(t) => {
                 break t;
             }
             Err(..) => {
-                println!("Error parsing input as 32-bit floating point integer.");
+                println!("Error parsing input as 32-bit unsigned integer.");
                 continue;
             }
         }
@@ -84,13 +84,13 @@ fn prompt_i32(rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>, p
 /// * __2__: The item's stack size.
 fn prompt_items(
     rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>,
-) -> Vec<(String, i32, i32)> {
-    let item_count = prompt_i32(rl, "Item count > ");
-    let mut items: Vec<(String, i32, i32)> = Vec::new();
+) -> Vec<(String, u32, u32)> {
+    let item_count = prompt_u32(rl, "Item count > ");
+    let mut items: Vec<(String, u32, u32)> = Vec::new();
     for n in 1..(item_count + 1) {
         let item_name = prompt(rl, format!("Item {} name > ", n).as_str());
-        let item_amount = prompt_i32(rl, format!("Item {} amount > ", n).as_str());
-        let item_stack_size = prompt_i32(rl, format!("Item {} stack size > ", n).as_str());
+        let item_amount = prompt_u32(rl, format!("Item {} amount > ", n).as_str());
+        let item_stack_size = prompt_u32(rl, format!("Item {} stack size > ", n).as_str());
         items.push((item_name, item_amount, item_stack_size));
     }
     items
