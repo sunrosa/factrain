@@ -151,7 +151,7 @@ fn prompt_items(
     // Prompt for all of the items.
     let mut items: Vec<(String, u32, u32)> = Vec::new();
     for n in 1..(item_count + 1) {
-        let item_name = prompt(rl, format!("Item {} name > ", n).to_lowercase().as_str());
+        let item_name = prompt(rl, format!("Item {} name > ", n).as_str()).to_lowercase();
         let item_amount = prompt_u32(rl, format!("Item {} amount > ", n).as_str());
         let item_stack_size = match item_name.as_str() {
             // Intermediate products
