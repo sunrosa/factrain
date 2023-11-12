@@ -87,10 +87,18 @@ fn main() {
                 "40 SLOTS (one car)          ---- {} items",
                 (item.1 * 40.0).round() as u32 * item.2
             );
+
+            // This is the alternative of "one car double". It is used in the case of 80 slots stacking cars used, as opposed to the far more common 40 slots stacking cars. 80 slot stacking cars refers to giving each car potentially different filters. 40 slot stacking cars refers to giving both of the two cars in a 1-2 train with the same filters.
+            println!(
+                "80 SLOTS (two cars)         ---- {} items",
+                (item.1 * 80.0).round() as u32 * item.2
+            );
         }
+
+        // This is a special case. It is (40 * stack_size * 2), instead of (80 * stack_size)
         println!(
-            "80 SLOTS (two cars)         ---- {} items",
-            (item.1 * 80.0).round() as u32 * item.2
+            "80 SLOTS (one car double)   ---- {} items",
+            (item.1 * 40.0).round() as u32 * item.2 * 2
         );
         if env_args.contains(&"-f".to_owned()) {
             println!(
