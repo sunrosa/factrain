@@ -1,11 +1,38 @@
 fn main() {
+    // Initialize Rustyline editor.
     let mut rl = rustyline::DefaultEditor::new().unwrap();
+
+    // Prompt user for items.
     let items = prompt_items(&mut rl);
 
-    // Debug contents of items Vec in debug mode.
     #[cfg(debug_assertions)]
     {
-        println!("{:?}", items);
+        println!("DEBUG main()[items]: {:?}", items);
+    }
+
+    // Total item stacks for averaging against. This number is what all items are divided by in order to get a unit rate.
+    let mut total_stacks = 0.0;
+    for item in &items {
+        total_stacks += item.1 as f64 / item.2 as f64;
+    }
+
+    #[cfg(debug_assertions)]
+    {
+        println!("DEBUG main()[total_stacks]: {:?}", total_stacks);
+    }
+
+    // Items ratios as floats between 0 and 1. This number contains the "percentage" of the item desired.
+    let mut item_ratios: Vec<(String, f64)> = Vec::new();
+    for item in &items {
+        item_ratios.push((
+            item.0.clone(),
+            (item.1 as f64 / item.2 as f64) / total_stacks,
+        ));
+    }
+
+    #[cfg(debug_assertions)]
+    {
+        println!("DEBUG main()[item_ratios]: {:?}", item_ratios);
     }
 }
 
