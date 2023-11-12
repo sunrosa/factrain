@@ -143,9 +143,70 @@ fn prompt_items(
     // Prompt for all of the items.
     let mut items: Vec<(String, u32, u32)> = Vec::new();
     for n in 1..(item_count + 1) {
-        let item_name = prompt(rl, format!("Item {} name > ", n).as_str());
+        let item_name = prompt(rl, format!("Item {} name > ", n).to_lowercase().as_str());
         let item_amount = prompt_u32(rl, format!("Item {} amount > ", n).as_str());
-        let item_stack_size = prompt_u32(rl, format!("Item {} stack size > ", n).as_str());
+        let item_stack_size = match item_name.as_str() {
+            // Intermediate products
+            "wood" => 100,
+            "coal" => 50,
+            "stone" => 50,
+            "iron ore" => 50,
+            "copper ore" => 50,
+            "uranium ore" => 50,
+            "raw fish" => 100,
+            "iron plate" => 100,
+            "copper plate" => 100,
+            "solid fuel" => 50,
+            "steel plate" => 100,
+            "plastic bar" => 100,
+            "sulfur" => 50,
+            "battery" => 200,
+            "explosives" => 50,
+            "crude oil barrel" => 10,
+            "heavy oil barrel" => 10,
+            "light oil barrel" => 10,
+            "lubricant barrel" => 10,
+            "petroleum gas barrel" => 10,
+            "sulfuric acid barrel" => 10,
+            "water barrel" => 10,
+            "copper cable" => 200,
+            "iron stick" => 100,
+            "iron gear wheel" => 100,
+            "empty barrel" => 10,
+            "electronic circuit" => 200,
+            "advanced circuit" => 200,
+            "processing unit" => 100,
+            "engine unit" => 50,
+            "electric engine unit" => 50,
+            "flying robot frame" => 50,
+            "rocket control unit" => 10,
+            "low density structure" => 10,
+            "rocket fuel" => 10,
+            "nuclear fuel" => 10,
+            "uranium-235" => 100,
+            "uranium-238" => 100,
+            "uranium fuel cell" => 50,
+            "used-up uranium fuel cell" => 50,
+            "automation science pack" => 200,
+            "logistic science pack" => 200,
+            "military science pack" => 200,
+            "chemical science pack" => 200,
+            "production science pack" => 200,
+            "utility science pack" => 200,
+            "space science pack" => 2000,
+            // Colloquialisms
+            "green circuit" => 200,
+            "red circuit" => 200,
+            "blue circuit" => 100,
+            "red science" => 200,
+            "green science" => 200,
+            "black science" => 200,
+            "blue science" => 200,
+            "purple science" => 200,
+            "yellow science" => 200,
+            "white science" => 2000,
+            _ => prompt_u32(rl, format!("Item {} stack size > ", n).as_str()),
+        };
         items.push((item_name, item_amount, item_stack_size));
     }
     items
