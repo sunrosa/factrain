@@ -45,38 +45,38 @@ fn main() {
             item.0
         );
         println!(
-            "40 SLOTS (one car)          ---- {:.4} stacks",
-            item.1 * 40.0
+            "40 SLOTS (one car)          ---- {} stacks",
+            (item.1 * 40.0).round() as u32
         );
         println!(
-            "80 SLOTS (two cars)         ---- {:.4} stacks",
-            item.1 * 80.0
+            "80 SLOTS (two cars)         ---- {} stacks",
+            (item.1 * 80.0).round() as u32
         );
         println!(
-            "288 SLOTS (6 steel chests)  ---- {:.4} stacks",
-            item.1 * 288.0
+            "288 SLOTS (6 steel chests)  ---- {} stacks",
+            (item.1 * 288.0).round() as u32
         );
         println!(
-            "624 SLOTS (13 steel chests) ---- {:.4} stacks",
-            item.1 * 624.0
+            "624 SLOTS (13 steel chests) ---- {} stacks",
+            (item.1 * 624.0).round() as u32
         );
 
         println!("======== ITEMS =========");
         println!(
-            "40 SLOTS (one car)          ---- {:.4} items",
-            item.1 * 40.0 * item.2 as f64
+            "40 SLOTS (one car)          ---- {} items",
+            (item.1 * 40.0).round() as u32 * item.2
         );
         println!(
-            "80 SLOTS (two cars)         ---- {:.4} items",
-            item.1 * 80.0 * item.2 as f64
+            "80 SLOTS (two cars)         ---- {} items",
+            (item.1 * 80.0).round() as u32 * item.2
         );
         println!(
-            "288 SLOTS (6 steel chests)  ---- {:.4} items",
-            item.1 * 288.0 * item.2 as f64
+            "288 SLOTS (6 steel chests)  ---- {} items",
+            (item.1 * 288.0).round() as u32 * item.2
         );
         println!(
-            "624 SLOTS (13 steel chests) ---- {:.4} items",
-            item.1 * 624.0 * item.2 as f64
+            "624 SLOTS (13 steel chests) ---- {} items",
+            (item.1 * 624.0).round() as u32 * item.2
         );
     }
 }
