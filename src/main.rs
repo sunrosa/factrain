@@ -59,61 +59,82 @@ fn main() {
             item.1 * 100.0
         );
         println!(
-            "40 SLOTS (one car)          ---- {} stacks",
+            "40 SLOTS (one car)           ---- {} stacks",
             (item.1 * 40.0).round() as u32
         );
+
         if env_args.contains(&"-f".to_owned()) {
             println!(
-                "80 SLOTS (two cars)         ---- {} stacks",
+                "80 SLOTS (two cars)          ---- {} stacks",
                 (item.1 * 80.0).round() as u32
             );
             println!(
-                "48 SLOTS (1 steel chest)    ---- {} stacks",
+                "48 SLOTS (1 steel chest)     ---- {} stacks",
                 (item.1 * 48.0).round() as u32
             );
             println!(
-                "288 SLOTS (6 steel chests)  ---- {} stacks",
+                "288 SLOTS (6 steel chests)   ---- {} stacks",
                 (item.1 * 288.0).round() as u32
             );
             println!(
-                "624 SLOTS (13 steel chests) ---- {} stacks",
+                "624 SLOTS (13 steel chests)  ---- {} stacks",
                 (item.1 * 624.0).round() as u32
+            );
+            println!(
+                "1296 SLOTS (27 steel chests) ---- {} stacks",
+                (item.1 * 1296.0).round() as u32
             );
         }
 
         println!("======== ITEMS =========");
         if env_args.contains(&"-f".to_owned()) {
             println!(
-                "40 SLOTS (one car)          ---- {} items",
+                "40 SLOTS (one car)           ---- {} items",
                 (item.1 * 40.0).round() as u32 * item.2
-            );
-
-            // This is the alternative of "one car double". It is used in the case of 80 slots stacking cars used, as opposed to the far more common 40 slots stacking cars. 80 slot stacking cars refers to giving each car potentially different filters. 40 slot stacking cars refers to giving both of the two cars in a 1-2 train with the same filters.
-            println!(
-                "80 SLOTS (two cars)         ---- {} items",
-                (item.1 * 80.0).round() as u32 * item.2
             );
         }
 
-        // This is a special case. It is (40 * stack_size * 2), instead of (80 * stack_size)
+        // This is a special case. It is (40 * stack_size * 2), instead of (80 * stack_size). This is the case because more often in 1-2 trains (the type of trains this calculator was designed for), the cars are set to have the same filters. This would lead to unexpected behavior if the user didn't realize this (otherwise) would have been rounding for 80 slots instead of 40. "SC" refers to "same cars".
         println!(
-            "80 SLOTS (one car double)   ---- {} items",
+            "80 SLOTS (SC two cars)       ---- {} items",
             (item.1 * 40.0).round() as u32 * item.2 * 2
         );
+
         if env_args.contains(&"-f".to_owned()) {
+            // This is the alternative of "one car double". It is used in the case of 80 slots stacking cars used, as opposed to the far more common 40 slots stacking cars. 80 slot stacking cars refers to giving each car potentially different filters. 40 slot stacking cars refers to giving both of the two cars in a 1-2 train with the same filters. "DC" refers to "different cars".
             println!(
-                "48 SLOTS (1 steel chest)    ---- {} items",
+                "80 SLOTS (DC two cars)       ---- {} items",
+                (item.1 * 80.0).round() as u32 * item.2
+            );
+            println!(
+                "160 SLOTS (SC four cars)     ---- {} items",
+                (item.1 * 40.0).round() as u32 * item.2 * 4
+            );
+            println!(
+                "160 SLOTS (DC four cars)     ---- {} items",
+                (item.1 * 160.0).round() as u32 * item.2
+            );
+            println!(
+                "48 SLOTS (1 steel chest)     ---- {} items",
                 (item.1 * 48.0).round() as u32 * item.2
             );
             println!(
-                "288 SLOTS (6 steel chests)  ---- {} items",
+                "288 SLOTS (6 steel chests)   ---- {} items",
                 (item.1 * 288.0).round() as u32 * item.2
             );
         }
+
         println!(
-            "624 SLOTS (13 steel chests) ---- {} items",
+            "624 SLOTS (13 steel chests)  ---- {} items",
             (item.1 * 624.0).round() as u32 * item.2
         );
+
+        if env_args.contains(&"-f".to_owned()) {
+            println!(
+                "1296 SLOTS (27 steel chests) ---- {} items",
+                (item.1 * 1296.0).round() as u32 * item.2
+            );
+        }
     }
 }
 
