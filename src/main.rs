@@ -42,7 +42,7 @@ fn main() {
     for item in item_ratios {
         println!(
             "================ {} ================\n======== STACKS ========",
-            item.0
+            item.0.to_uppercase()
         );
         println!(
             "40 SLOTS (one car)          ---- ({} stacks)",
@@ -203,6 +203,7 @@ fn prompt_items(
             "utility science pack" => 200,
             "space science pack" => 2000,
             // Colloquialisms
+            "gear" => 100,
             "green circuit" => 200,
             "red circuit" => 200,
             "blue circuit" => 100,
