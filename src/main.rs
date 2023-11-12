@@ -54,8 +54,9 @@ fn main() {
 
     for item in item_ratios {
         println!(
-            "================ {} ================\n======== STACKS ========",
-            item.0.to_uppercase()
+            "================ {} ({:.2}%) ================\n======== STACKS ========",
+            item.0.to_uppercase(),
+            item.1 * 100.0
         );
         println!(
             "40 SLOTS (one car)          ---- {} stacks",
