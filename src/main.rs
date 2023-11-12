@@ -22,17 +22,62 @@ fn main() {
     }
 
     // Items ratios as floats between 0 and 1. This number contains the "percentage" of the item desired.
-    let mut item_ratios: Vec<(String, f64)> = Vec::new();
+    // * 0: The name of the item.
+    // * 1: The ratio of the item.
+    // * 2: The stack size of the item.
+    let mut item_ratios: Vec<(String, f64, u32)> = Vec::new();
     for item in &items {
         item_ratios.push((
             item.0.clone(),
             (item.1 as f64 / item.2 as f64) / total_stacks,
+            item.2,
         ));
     }
 
     #[cfg(debug_assertions)]
     {
         println!("DEBUG main()[item_ratios]: {:?}", item_ratios);
+    }
+
+    for item in item_ratios {
+        println!(
+            "================ {} ================\n======== STACKS ========",
+            item.0
+        );
+        println!(
+            "40 SLOTS (one car)          ---- {:.4} stacks",
+            item.1 * 40.0
+        );
+        println!(
+            "80 SLOTS (two cars)         ---- {:.4} stacks",
+            item.1 * 80.0
+        );
+        println!(
+            "288 SLOTS (6 steel chests)  ---- {:.4} stacks",
+            item.1 * 288.0
+        );
+        println!(
+            "624 SLOTS (13 steel chests) ---- {:.4} stacks",
+            item.1 * 624.0
+        );
+
+        println!("======== ITEMS =========");
+        println!(
+            "40 SLOTS (one car)          ---- {:.4} items",
+            item.1 * 40.0 * item.2 as f64
+        );
+        println!(
+            "80 SLOTS (two cars)         ---- {:.4} items",
+            item.1 * 80.0 * item.2 as f64
+        );
+        println!(
+            "288 SLOTS (6 steel chests)  ---- {:.4} items",
+            item.1 * 288.0 * item.2 as f64
+        );
+        println!(
+            "624 SLOTS (13 steel chests) ---- {:.4} items",
+            item.1 * 624.0 * item.2 as f64
+        );
     }
 }
 
@@ -85,7 +130,17 @@ fn prompt_u32(rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>, p
 fn prompt_items(
     rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>,
 ) -> Vec<(String, u32, u32)> {
-    let item_count = prompt_u32(rl, "Item count > ");
+    // Ask the user for the number of items they wish to be prompted for.
+    let item_count = loop {
+        let count = prompt_u32(rl, "Item count > ");
+        if count == 0 {
+            println!("Item count must not be zero.");
+            continue;
+        }
+        break count;
+    };
+
+    // Prompt for all of the items.
     let mut items: Vec<(String, u32, u32)> = Vec::new();
     for n in 1..(item_count + 1) {
         let item_name = prompt(rl, format!("Item {} name > ", n).as_str());
