@@ -59,13 +59,13 @@ fn main() {
             item.1 * 100.0
         );
         println!(
-            "40 SLOTS (one car)           ---- {} stacks",
+            "40 SLOTS (1 car)             ---- {} stacks",
             (item.1 * 40.0).round() as u32
         );
 
         if env_args.contains(&"-f".to_owned()) {
             println!(
-                "80 SLOTS (two cars)          ---- {} stacks",
+                "80 SLOTS (2 cars)            ---- {} stacks",
                 (item.1 * 80.0).round() as u32
             );
             println!(
@@ -89,29 +89,37 @@ fn main() {
         println!("======== ITEMS =========");
         if env_args.contains(&"-f".to_owned()) {
             println!(
-                "40 SLOTS (one car)           ---- {} items",
+                "40 SLOTS (1 car)             ---- {} items",
                 (item.1 * 40.0).round() as u32 * item.2
             );
         }
 
         // This is a special case. It is (40 * stack_size * 2), instead of (80 * stack_size). This is the case because more often in 1-2 trains (the type of trains this calculator was designed for), the cars are set to have the same filters. This would lead to unexpected behavior if the user didn't realize this (otherwise) would have been rounding for 80 slots instead of 40. "SC" refers to "same cars".
         println!(
-            "80 SLOTS (SC two cars)       ---- {} items",
+            "80 SLOTS (SC 2 cars)         ---- {} items",
             (item.1 * 40.0).round() as u32 * item.2 * 2
         );
 
         if env_args.contains(&"-f".to_owned()) {
             // This is the alternative of "one car double". It is used in the case of 80 slots stacking cars used, as opposed to the far more common 40 slots stacking cars. 80 slot stacking cars refers to giving each car potentially different filters. 40 slot stacking cars refers to giving both of the two cars in a 1-2 train with the same filters. "DC" refers to "different cars".
             println!(
-                "80 SLOTS (DC two cars)       ---- {} items",
+                "80 SLOTS (DC 2 cars)         ---- {} items",
                 (item.1 * 80.0).round() as u32 * item.2
             );
             println!(
-                "160 SLOTS (SC four cars)     ---- {} items",
+                "120 SLOTS (SC 3 cars)        ---- {} items",
+                (item.1 * 40.0).round() as u32 * item.2 * 3
+            );
+            println!(
+                "120 SLOTS (DC 3 cars)        ---- {} items",
+                (item.1 * 120.0).round() as u32 * item.2
+            );
+            println!(
+                "160 SLOTS (SC 4 cars)        ---- {} items",
                 (item.1 * 40.0).round() as u32 * item.2 * 4
             );
             println!(
-                "160 SLOTS (DC four cars)     ---- {} items",
+                "160 SLOTS (DC 4 cars)        ---- {} items",
                 (item.1 * 160.0).round() as u32 * item.2
             );
             println!(
