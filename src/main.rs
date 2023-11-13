@@ -355,15 +355,22 @@ fn fetch_item_stack_size(item_name: &str) -> Option<u32> {
     }
 }
 
+/// Ingredient as defined by the user.
 #[derive(Debug, Clone)]
 struct Ingredient {
+    /// The name of the ingredient.
     name: String,
+    /// The amount of the ingredient needed.
     amount: u32,
+    /// The stack size of the ingredient.
     stack_size: u32,
 }
 
+/// The ratio of the needed ingredient as an f64 between 0 and 1.
 #[derive(Debug, Clone)]
 struct IngredientRatio {
+    /// Ingredient information.
     ingredient: Ingredient,
+    /// The ratio of the ingredient calculated to be needed. This takes stack size into account. This value is between 0 and 1.
     ratio: f64,
 }
