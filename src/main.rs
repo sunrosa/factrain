@@ -1,5 +1,5 @@
 fn main() {
-    // Read environment variables
+    // Read environment variables.
     let env_args: Vec<String> = std::env::args().collect();
 
     #[cfg(debug_assertions)]
@@ -7,15 +7,16 @@ fn main() {
         println!("{:?}", env_args);
     }
 
+    // Print help information if requested.
     if env_args.contains(&"-h".to_owned()) {
         println!("-f    Print full output.\n-h    Print help.");
         return;
     }
 
-    // Initialize Rustyline editor.
+    // Initialize Rustyline Editor in order to read user input lines.
     let mut rl = rustyline::DefaultEditor::new().unwrap();
 
-    // Prompt user for items.
+    // Prompt user for items to be calculated.
     let items = prompt_items(&mut rl);
 
     #[cfg(debug_assertions)]
@@ -52,6 +53,7 @@ fn main() {
         println!("DEBUG main()[item_ratios]: {:?}", item_ratios);
     }
 
+    // Print calculated output.
     for item in item_ratios {
         println!(
             "================ {} ({:.2}%) ================\n======== STACKS ========",
@@ -219,112 +221,119 @@ fn prompt_items(
     for n in 1..(item_count + 1) {
         let item_name = prompt(rl, format!("Item {} name > ", n).as_str()).to_lowercase();
         let item_amount = prompt_u32(rl, format!("Item {} amount > ", n).as_str());
-        let item_stack_size = match item_name.as_str() {
-            // Logistics
-            "stone brick" => 100,
-            "concrete" => 100,
-            "hazard concrete" => 100,
-            "refined concrete" => 100,
-            "refined hazard concrete" => 100,
-            "landfill" => 100,
-            // Production
-            "repair pack" => 100,
-            "speed module" => 50,
-            "speed module 2" => 50,
-            "speed module 3" => 50,
-            "efficiency module" => 50,
-            "efficiency module 2" => 50,
-            "efficiency module 3" => 50,
-            "productivity module" => 50,
-            "productivity module 2" => 50,
-            "productivity module 3" => 50,
-            "satellite" => 1,
-            // Intermediate products
-            "wood" => 100,
-            "coal" => 50,
-            "stone" => 50,
-            "iron ore" => 50,
-            "copper ore" => 50,
-            "uranium ore" => 50,
-            "raw fish" => 100,
-            "iron plate" => 100,
-            "copper plate" => 100,
-            "solid fuel" => 50,
-            "steel plate" => 100,
-            "plastic bar" => 100,
-            "sulfur" => 50,
-            "battery" => 200,
-            "explosives" => 50,
-            "crude oil barrel" => 10,
-            "heavy oil barrel" => 10,
-            "light oil barrel" => 10,
-            "lubricant barrel" => 10,
-            "petroleum gas barrel" => 10,
-            "sulfuric acid barrel" => 10,
-            "water barrel" => 10,
-            "copper cable" => 200,
-            "iron stick" => 100,
-            "iron gear wheel" => 100,
-            "empty barrel" => 10,
-            "electronic circuit" => 200,
-            "advanced circuit" => 200,
-            "processing unit" => 100,
-            "engine unit" => 50,
-            "electric engine unit" => 50,
-            "flying robot frame" => 50,
-            "rocket control unit" => 10,
-            "low density structure" => 10,
-            "rocket fuel" => 10,
-            "nuclear fuel" => 10,
-            "uranium-235" => 100,
-            "uranium-238" => 100,
-            "uranium fuel cell" => 50,
-            "used-up uranium fuel cell" => 50,
-            "automation science pack" => 200,
-            "logistic science pack" => 200,
-            "military science pack" => 200,
-            "chemical science pack" => 200,
-            "production science pack" => 200,
-            "utility science pack" => 200,
-            "space science pack" => 2000,
-            // Combat
-            "firearm magazine" => 200,
-            "piercing rounds magazine" => 200,
-            "uranium rounds magazine" => 200,
-            "shotgun shells" => 200,
-            "piercing shotgun shells" => 200,
-            "cannon shell" => 200,
-            "explosive cannon shell" => 200,
-            "uranium cannon shell" => 200,
-            "explosive uranium cannon shell" => 200,
-            "artillery shell" => 1,
-            "rocket" => 200,
-            "explosive rocket" => 200,
-            "atomic bomb" => 10,
-            "flamethrower ammo" => 100,
-            // Colloquialisms
-            "fish" => 100,
-            "steel" => 100,
-            "plastic" => 100,
-            "gear" => 100,
-            "green circuit" => 200,
-            "red circuit" => 200,
-            "blue circuit" => 100,
-            "engine" => 50,
-            "electric engine" => 50,
-            "robot frame" => 50,
-            "rcu" => 10,
-            "lds" => 10,
-            "red science" => 200,
-            "green science" => 200,
-            "black science" => 200,
-            "blue science" => 200,
-            "purple science" => 200,
-            "yellow science" => 200,
-            "white science" => 2000,
-            _ => prompt_u32(rl, format!("Item {} stack size > ", n).as_str()),
+        let item_stack_size = match fetch_item_stack_size(item_name.as_str()) {
+            Some(stack_size) => stack_size,
+            None => prompt_u32(rl, format!("Item {} stack size > ", n).as_str()),
         };
         items.push((item_name, item_amount, item_stack_size));
     }
     items
+}
+
+fn fetch_item_stack_size(item_name: &str) -> Option<u32> {
+    match item_name {
+        // Logistics
+        "stone brick" => Some(100),
+        "concrete" => Some(100),
+        "hazard concrete" => Some(100),
+        "refined concrete" => Some(100),
+        "refined hazard concrete" => Some(100),
+        "landfill" => Some(100),
+        // Production
+        "repair pack" => Some(100),
+        "speed module" => Some(50),
+        "speed module 2" => Some(50),
+        "speed module 3" => Some(50),
+        "efficiency module" => Some(50),
+        "efficiency module 2" => Some(50),
+        "efficiency module 3" => Some(50),
+        "productivity module" => Some(50),
+        "productivity module 2" => Some(50),
+        "productivity module 3" => Some(50),
+        "satellite" => Some(1),
+        // Intermediate products
+        "wood" => Some(100),
+        "coal" => Some(50),
+        "stone" => Some(50),
+        "iron ore" => Some(50),
+        "copper ore" => Some(50),
+        "uranium ore" => Some(50),
+        "raw fish" => Some(100),
+        "iron plate" => Some(100),
+        "copper plate" => Some(100),
+        "solid fuel" => Some(50),
+        "steel plate" => Some(100),
+        "plastic bar" => Some(100),
+        "sulfur" => Some(50),
+        "battery" => Some(200),
+        "explosives" => Some(50),
+        "crude oil barrel" => Some(10),
+        "heavy oil barrel" => Some(10),
+        "light oil barrel" => Some(10),
+        "lubricant barrel" => Some(10),
+        "petroleum gas barrel" => Some(10),
+        "sulfuric acid barrel" => Some(10),
+        "water barrel" => Some(10),
+        "copper cable" => Some(200),
+        "iron stick" => Some(100),
+        "iron gear wheel" => Some(100),
+        "empty barrel" => Some(10),
+        "electronic circuit" => Some(200),
+        "advanced circuit" => Some(200),
+        "processing unit" => Some(100),
+        "engine unit" => Some(50),
+        "electric engine unit" => Some(50),
+        "flying robot frame" => Some(50),
+        "rocket control unit" => Some(10),
+        "low density structure" => Some(10),
+        "rocket fuel" => Some(10),
+        "nuclear fuel" => Some(10),
+        "uranium-235" => Some(100),
+        "uranium-238" => Some(100),
+        "uranium fuel cell" => Some(50),
+        "used-up uranium fuel cell" => Some(50),
+        "automation science pack" => Some(200),
+        "logistic science pack" => Some(200),
+        "military science pack" => Some(200),
+        "chemical science pack" => Some(200),
+        "production science pack" => Some(200),
+        "utility science pack" => Some(200),
+        "space science pack" => Some(2000),
+        // Combat
+        "firearm magazine" => Some(200),
+        "piercing rounds magazine" => Some(200),
+        "uranium rounds magazine" => Some(200),
+        "shotgun shells" => Some(200),
+        "piercing shotgun shells" => Some(200),
+        "cannon shell" => Some(200),
+        "explosive cannon shell" => Some(200),
+        "uranium cannon shell" => Some(200),
+        "explosive uranium cannon shell" => Some(200),
+        "artillery shell" => Some(1),
+        "rocket" => Some(200),
+        "explosive rocket" => Some(200),
+        "atomic bomb" => Some(10),
+        "flamethrower ammo" => Some(100),
+        // Colloquialisms
+        "fish" => Some(100),
+        "steel" => Some(100),
+        "plastic" => Some(100),
+        "gear" => Some(100),
+        "green circuit" => Some(200),
+        "red circuit" => Some(200),
+        "blue circuit" => Some(100),
+        "engine" => Some(50),
+        "electric engine" => Some(50),
+        "robot frame" => Some(50),
+        "rcu" => Some(10),
+        "lds" => Some(10),
+        "red science" => Some(200),
+        "green science" => Some(200),
+        "black science" => Some(200),
+        "blue science" => Some(200),
+        "purple science" => Some(200),
+        "yellow science" => Some(200),
+        "white science" => Some(2000),
+        _ => None,
+    }
 }
