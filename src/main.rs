@@ -27,7 +27,7 @@ fn main() {
     // Total item stacks for averaging against. This number is what all items are divided by in order to get a unit rate.
     let mut total_stacks = 0.0;
     for item in &items {
-        total_stacks += item.1 as f64 / item.2 as f64;
+        total_stacks += item.amount as f64 / item.stack_size as f64;
     }
 
     #[cfg(debug_assertions)]
@@ -39,13 +39,12 @@ fn main() {
     // * 0: The name of the item.
     // * 1: The ratio of the item.
     // * 2: The stack size of the item.
-    let mut item_ratios: Vec<(String, f64, u32)> = Vec::new();
+    let mut item_ratios: Vec<IngredientRatio> = Vec::new();
     for item in &items {
-        item_ratios.push((
-            item.0.clone(),
-            (item.1 as f64 / item.2 as f64) / total_stacks,
-            item.2,
-        ));
+        item_ratios.push(IngredientRatio {
+            ingredient: item.clone(),
+            ratio: (item.amount as f64 / item.stack_size as f64) / total_stacks,
+        });
     }
 
     #[cfg(debug_assertions)]
@@ -57,39 +56,39 @@ fn main() {
     for item in item_ratios {
         println!(
             "================ {} ({:.2}%) ================\n======== STACKS ========",
-            item.0.to_uppercase(),
-            item.1 * 100.0
+            item.ingredient.name.to_uppercase(),
+            item.ratio * 100.0
         );
 
         println!(
             "40 SLOTS (1 car)             ---- {} stacks",
-            (item.1 * 40.0).round() as u32
+            (item.ratio * 40.0).round() as u32
         );
 
         if env_args.contains(&"-f".to_owned()) {
             println!(
                 "80 SLOTS (2 cars)            ---- {} stacks",
-                (item.1 * 80.0).round() as u32
+                (item.ratio * 80.0).round() as u32
             );
 
             println!(
                 "48 SLOTS (1 steel chest)     ---- {} stacks",
-                (item.1 * 48.0).round() as u32
+                (item.ratio * 48.0).round() as u32
             );
 
             println!(
                 "288 SLOTS (6 steel chests)   ---- {} stacks",
-                (item.1 * 288.0).round() as u32
+                (item.ratio * 288.0).round() as u32
             );
 
             println!(
                 "624 SLOTS (13 steel chests)  ---- {} stacks",
-                (item.1 * 624.0).round() as u32
+                (item.ratio * 624.0).round() as u32
             );
 
             println!(
                 "1296 SLOTS (27 steel chests) ---- {} stacks",
-                (item.1 * 1296.0).round() as u32
+                (item.ratio * 1296.0).round() as u32
             );
         }
 
@@ -97,62 +96,62 @@ fn main() {
         if env_args.contains(&"-f".to_owned()) {
             println!(
                 "40 SLOTS (1 car)             ---- {} items",
-                (item.1 * 40.0).round() as u32 * item.2
+                (item.ratio * 40.0).round() as u32 * item.ingredient.stack_size
             );
 
             // "SC" refers to "same car" filtering. This requires each train car to follow the same filter.
             println!(
                 "80 SLOTS (SC 2 cars)         ---- {} items",
-                (item.1 * 40.0).round() as u32 * item.2 * 2
+                (item.ratio * 40.0).round() as u32 * item.ingredient.stack_size * 2
             );
 
             // "DC" refers to "different car" filtering. This allows each train car to follow their own unique filter.
             println!(
                 "80 SLOTS (DC 2 cars)         ---- {} items",
-                (item.1 * 80.0).round() as u32 * item.2
+                (item.ratio * 80.0).round() as u32 * item.ingredient.stack_size
             );
 
             println!(
                 "120 SLOTS (SC 3 cars)        ---- {} items",
-                (item.1 * 40.0).round() as u32 * item.2 * 3
+                (item.ratio * 40.0).round() as u32 * item.ingredient.stack_size * 3
             );
 
             println!(
                 "120 SLOTS (DC 3 cars)        ---- {} items",
-                (item.1 * 120.0).round() as u32 * item.2
+                (item.ratio * 120.0).round() as u32 * item.ingredient.stack_size
             );
         }
 
         println!(
             "160 SLOTS (SC 4 cars)        ---- {} items",
-            (item.1 * 40.0).round() as u32 * item.2 * 4
+            (item.ratio * 40.0).round() as u32 * item.ingredient.stack_size * 4
         );
 
         if env_args.contains(&"-f".to_owned()) {
             println!(
                 "160 SLOTS (DC 4 cars)        ---- {} items",
-                (item.1 * 160.0).round() as u32 * item.2
+                (item.ratio * 160.0).round() as u32 * item.ingredient.stack_size
             );
 
             println!(
                 "48 SLOTS (1 steel chest)     ---- {} items",
-                (item.1 * 48.0).round() as u32 * item.2
+                (item.ratio * 48.0).round() as u32 * item.ingredient.stack_size
             );
 
             println!(
                 "288 SLOTS (6 steel chests)   ---- {} items",
-                (item.1 * 288.0).round() as u32 * item.2
+                (item.ratio * 288.0).round() as u32 * item.ingredient.stack_size
             );
 
             println!(
                 "624 SLOTS (13 steel chests)  ---- {} items",
-                (item.1 * 624.0).round() as u32 * item.2
+                (item.ratio * 624.0).round() as u32 * item.ingredient.stack_size
             );
         }
 
         println!(
             "1296 SLOTS (27 steel chests) ---- {} items",
-            (item.1 * 1296.0).round() as u32 * item.2
+            (item.ratio * 1296.0).round() as u32 * item.ingredient.stack_size
         );
     }
 }
@@ -205,7 +204,7 @@ fn prompt_u32(rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>, p
 /// * __2__: The item's stack size.
 fn prompt_items(
     rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>,
-) -> Vec<(String, u32, u32)> {
+) -> Vec<Ingredient> {
     // Ask the user for the number of items they wish to be prompted for.
     let item_count = loop {
         let count = prompt_u32(rl, "Item count > ");
@@ -217,7 +216,7 @@ fn prompt_items(
     };
 
     // Prompt for all of the items.
-    let mut items: Vec<(String, u32, u32)> = Vec::new();
+    let mut items: Vec<Ingredient> = Vec::new();
     for n in 1..(item_count + 1) {
         let item_name = prompt(rl, format!("Item {} name > ", n).as_str()).to_lowercase();
         let item_amount = prompt_u32(rl, format!("Item {} amount > ", n).as_str());
@@ -225,7 +224,11 @@ fn prompt_items(
             Some(stack_size) => stack_size,
             None => prompt_u32(rl, format!("Item {} stack size > ", n).as_str()),
         };
-        items.push((item_name, item_amount, item_stack_size));
+        items.push(Ingredient {
+            name: item_name,
+            amount: item_amount,
+            stack_size: item_stack_size,
+        });
     }
     items
 }
@@ -350,4 +353,17 @@ fn fetch_item_stack_size(item_name: &str) -> Option<u32> {
         "uranium rounds" => Some(200),
         _ => None,
     }
+}
+
+#[derive(Debug, Clone)]
+struct Ingredient {
+    name: String,
+    amount: u32,
+    stack_size: u32,
+}
+
+#[derive(Debug, Clone)]
+struct IngredientRatio {
+    ingredient: Ingredient,
+    ratio: f64,
 }
