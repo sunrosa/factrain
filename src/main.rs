@@ -174,27 +174,10 @@ fn prompt(rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>, p: &s
     }
 }
 
-/// Prompt through STDIN for user integer input using rustyline `rl` with prompt `p`. This function will repeat the prompt until a valid integer is provided.
+/// Prompt and parse through STDIN for user generic input using rustyline `rl` with prompt `p`. This function will repeat the prompt until a valid type is provided.
 ///
-/// # Arguments
-/// * `rl` - Rustyline [Editor](rustyline::Editor) used to read user's input.
-/// * `p` - User prompt given to the user to signal the need for input.
-fn prompt_u32(rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>, p: &str) -> u32 {
-    loop {
-        let input_string = prompt(rl, p);
-        match input_string.parse::<u32>() {
-            Ok(t) => {
-                break t;
-            }
-            Err(..) => {
-                println!("Error parsing input as 32-bit unsigned integer.");
-                continue;
-            }
-        }
-    }
-}
-
-/// Prompt through STDIN for user integer input using rustyline `rl` with prompt `p`. This function will repeat the prompt until a valid integer is provided.
+/// # Generic parameters
+/// * `T` - The type to parse the user input into. This must implement [FromStr].
 ///
 /// # Arguments
 /// * `rl` - Rustyline [Editor](rustyline::Editor) used to read user's input.
