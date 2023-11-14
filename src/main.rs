@@ -1,3 +1,5 @@
+use std::{fmt::Display, str::FromStr};
+
 fn main() {
     // Read environment variables.
     let env_args: Vec<String> = std::env::args().collect();
@@ -27,7 +29,7 @@ fn main() {
     // Total item stacks for averaging against. This number is what all items are divided by in order to get a unit rate.
     let mut total_stacks = 0.0;
     for item in &items {
-        total_stacks += item.amount as f64 / item.stack_size as f64;
+        total_stacks += item.amount / item.stack_size as f64;
     }
 
     #[cfg(debug_assertions)]
@@ -43,7 +45,7 @@ fn main() {
     for item in &items {
         item_ratios.push(IngredientRatio {
             ingredient: item.clone(),
-            ratio: (item.amount as f64 / item.stack_size as f64) / total_stacks,
+            ratio: (item.amount / item.stack_size as f64) / total_stacks,
         });
     }
 
@@ -192,6 +194,29 @@ fn prompt_u32(rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>, p
     }
 }
 
+/// Prompt through STDIN for user integer input using rustyline `rl` with prompt `p`. This function will repeat the prompt until a valid integer is provided.
+///
+/// # Arguments
+/// * `rl` - Rustyline [Editor](rustyline::Editor) used to read user's input.
+/// * `p` - User prompt given to the user to signal the need for input.
+fn prompt_and_parse<T: FromStr<Err = impl Display>>(
+    rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>,
+    p: &str,
+) -> T {
+    loop {
+        let input_string = prompt(rl, p);
+        match input_string.parse::<T>() {
+            Ok(t) => {
+                break t;
+            }
+            Err(e) => {
+                println!("Error parsing input: {}", e);
+                continue;
+            }
+        }
+    }
+}
+
 /// Prompt through STDIN for user integer input using rustyline `rl` with prompt `p`. This function will ask the user for the number of items they wish to list. Then, a looping prompt will ask them for the item name, item amount, and item stack size.
 ///
 /// # Arguments
@@ -207,7 +232,7 @@ fn prompt_items(
 ) -> Vec<Ingredient> {
     // Ask the user for the number of items they wish to be prompted for.
     let item_count = loop {
-        let count = prompt_u32(rl, "Item count > ");
+        let count = prompt_and_parse::<u32>(rl, "Item count > ");
         if count == 0 {
             println!("Item count must not be zero.");
             continue;
@@ -219,10 +244,10 @@ fn prompt_items(
     let mut items: Vec<Ingredient> = Vec::new();
     for n in 1..(item_count + 1) {
         let item_name = prompt(rl, format!("Item {} name > ", n).as_str()).to_lowercase();
-        let item_amount = prompt_u32(rl, format!("Item {} amount > ", n).as_str());
+        let item_amount = prompt_and_parse::<f64>(rl, format!("Item {} amount > ", n).as_str());
         let item_stack_size = match fetch_item_stack_size(item_name.as_str()) {
             Some(stack_size) => stack_size,
-            None => prompt_u32(rl, format!("Item {} stack size > ", n).as_str()),
+            None => prompt_and_parse::<u32>(rl, format!("Item {} stack size > ", n).as_str()),
         };
         items.push(Ingredient {
             name: item_name,
@@ -361,7 +386,7 @@ struct Ingredient {
     /// The name of the ingredient.
     name: String,
     /// The amount of the ingredient needed.
-    amount: u32,
+    amount: f64,
     /// The stack size of the ingredient.
     stack_size: u32,
 }
