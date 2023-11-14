@@ -63,59 +63,69 @@ fn main() {
         );
 
         println!(
-            "40 SLOTS (1 car)             ---- {} stacks",
-            (item.ratio * 40.0).round() as u32
+            "40 SLOTS (1 car)             ---- {} {} stacks",
+            (item.ratio * 40.0).round() as u32,
+            item.ingredient.name
         );
 
         if env_args.contains(&"-f".to_owned()) {
             println!(
-                "80 SLOTS (2 cars)            ---- {} stacks",
-                (item.ratio * 80.0).round() as u32
+                "80 SLOTS (2 cars)            ---- {} {} stacks",
+                (item.ratio * 80.0).round() as u32,
+                item.ingredient.name
             );
 
             println!(
-                "48 SLOTS (1 steel chest)     ---- {} stacks",
-                (item.ratio * 48.0).round() as u32
+                "48 SLOTS (1 steel chest)     ---- {} {} stacks",
+                (item.ratio * 48.0).round() as u32,
+                item.ingredient.name
             );
 
             println!(
-                "288 SLOTS (6 steel chests)   ---- {} stacks",
-                (item.ratio * 288.0).round() as u32
+                "288 SLOTS (6 steel chests)   ---- {} {} stacks",
+                (item.ratio * 288.0).round() as u32,
+                item.ingredient.name
             );
 
             println!(
-                "624 SLOTS (13 steel chests)  ---- {} stacks",
-                (item.ratio * 624.0).round() as u32
+                "624 SLOTS (13 steel chests)  ---- {} {} stacks",
+                (item.ratio * 624.0).round() as u32,
+                item.ingredient.name
             );
 
             println!(
-                "1296 SLOTS (27 steel chests) ---- {} stacks",
-                (item.ratio * 1296.0).round() as u32
+                "1296 SLOTS (27 steel chests) ---- {} {} stacks",
+                (item.ratio * 1296.0).round() as u32,
+                item.ingredient.name
             );
         }
 
         println!("======== ITEMS =========");
         if env_args.contains(&"-f".to_owned()) {
             println!(
-                "40 SLOTS (1 car)             ---- {} items",
-                (item.ratio * 40.0).round() as u32 * item.ingredient.stack_size
+                "40 SLOTS (1 car)             ---- {} {} items",
+                (item.ratio * 40.0).round() as u32 * item.ingredient.stack_size,
+                item.ingredient.name
             );
 
             // "SC" refers to "same car" filtering. This requires each train car to follow the same filter.
             println!(
-                "80 SLOTS (SC 2 cars)         ---- {} items",
-                (item.ratio * 40.0).round() as u32 * item.ingredient.stack_size * 2
+                "80 SLOTS (SC 2 cars)         ---- {} {} items",
+                (item.ratio * 40.0).round() as u32 * item.ingredient.stack_size * 2,
+                item.ingredient.name
             );
 
             // "DC" refers to "different car" filtering. This allows each train car to follow their own unique filter.
             println!(
-                "80 SLOTS (DC 2 cars)         ---- {} items",
-                (item.ratio * 80.0).round() as u32 * item.ingredient.stack_size
+                "80 SLOTS (DC 2 cars)         ---- {} {} items",
+                (item.ratio * 80.0).round() as u32 * item.ingredient.stack_size,
+                item.ingredient.name
             );
 
             println!(
-                "120 SLOTS (SC 3 cars)        ---- {} items",
-                (item.ratio * 40.0).round() as u32 * item.ingredient.stack_size * 3
+                "120 SLOTS (SC 3 cars)        ---- {} {} items",
+                (item.ratio * 40.0).round() as u32 * item.ingredient.stack_size * 3,
+                item.ingredient.name
             );
 
             println!(
@@ -125,35 +135,41 @@ fn main() {
         }
 
         println!(
-            "160 SLOTS (SC 4 cars)        ---- {} items",
-            (item.ratio * 40.0).round() as u32 * item.ingredient.stack_size * 4
+            "160 SLOTS (SC 4 cars)        ---- {} {} items",
+            (item.ratio * 40.0).round() as u32 * item.ingredient.stack_size * 4,
+            item.ingredient.name
         );
 
         if env_args.contains(&"-f".to_owned()) {
             println!(
-                "160 SLOTS (DC 4 cars)        ---- {} items",
-                (item.ratio * 160.0).round() as u32 * item.ingredient.stack_size
+                "160 SLOTS (DC 4 cars)        ---- {} {} items",
+                (item.ratio * 160.0).round() as u32 * item.ingredient.stack_size,
+                item.ingredient.name
             );
 
             println!(
-                "48 SLOTS (1 steel chest)     ---- {} items",
-                (item.ratio * 48.0).round() as u32 * item.ingredient.stack_size
+                "48 SLOTS (1 steel chest)     ---- {} {} items",
+                (item.ratio * 48.0).round() as u32 * item.ingredient.stack_size,
+                item.ingredient.name
             );
 
             println!(
-                "288 SLOTS (6 steel chests)   ---- {} items",
-                (item.ratio * 288.0).round() as u32 * item.ingredient.stack_size
+                "288 SLOTS (6 steel chests)   ---- {} {} items",
+                (item.ratio * 288.0).round() as u32 * item.ingredient.stack_size,
+                item.ingredient.name
             );
 
             println!(
-                "624 SLOTS (13 steel chests)  ---- {} items",
-                (item.ratio * 624.0).round() as u32 * item.ingredient.stack_size
+                "624 SLOTS (13 steel chests)  ---- {} {} items",
+                (item.ratio * 624.0).round() as u32 * item.ingredient.stack_size,
+                item.ingredient.name
             );
         }
 
         println!(
-            "1296 SLOTS (27 steel chests) ---- {} items",
-            (item.ratio * 1296.0).round() as u32 * item.ingredient.stack_size
+            "1296 SLOTS (27 steel chests) ---- {} {} items",
+            (item.ratio * 1296.0).round() as u32 * item.ingredient.stack_size,
+            item.ingredient.name
         );
     }
 }
