@@ -185,12 +185,20 @@ fn main() {
 /// * `rl` - Rustyline [Editor](rustyline::Editor) used to read user's input.
 /// * `p` - User prompt given to the user to signal the need for input.
 fn prompt(rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>, p: &str) -> String {
-    let readline = rl.readline(p);
-    match readline {
-        Ok(line) => line,
-        Err(..) => {
-            println!("Input error.");
-            "".to_owned()
+    loop {
+        let readline = rl.readline(p);
+        match readline {
+            Ok(line) => break line,
+            Err(e) => match e {
+                rustyline::error::ReadlineError::Interrupted => {
+                    // If the user interrupts the process at the prompt (with CTRL-C), exit here and now.
+                    std::process::exit(0);
+                }
+                _ => {
+                    println!("Input error: {}", e);
+                    continue;
+                }
+            },
         }
     }
 }
