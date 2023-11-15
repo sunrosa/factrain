@@ -8,7 +8,7 @@ fn main() {
 
     #[cfg(debug_assertions)]
     {
-        println!("{:?}", env_args);
+        println!("DEBUG main()[env_args] {:?}", env_args);
     }
 
     // Print help information if requested.
@@ -191,7 +191,13 @@ fn prompt(rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>, p: &s
             Ok(line) => break line,
             Err(e) => match e {
                 rustyline::error::ReadlineError::Interrupted => {
-                    // If the user interrupts the process at the prompt (with CTRL-C), exit here and now.
+                    // If interrupt signal is caught (with CTRL-C), exit here and now.
+
+                    #[cfg(debug_assertions)]
+                    {
+                        println!("Interrupt signal caught. Terminating.")
+                    }
+
                     std::process::exit(0);
                 }
                 _ => {
