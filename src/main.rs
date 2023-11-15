@@ -12,7 +12,7 @@ fn main() {
     }
 
     // Print help information if requested.
-    if env_args.contains(&"-h".to_owned()) {
+    if env_args.contains(&"-h".into()) {
         println!("-f    Print full output.\n-h    Print help.");
         return;
     }
@@ -72,7 +72,7 @@ fn main() {
             item.ingredient.name
         );
 
-        if env_args.contains(&"-f".to_owned()) {
+        if env_args.contains(&"-f".into()) {
             println!(
                 "80 SLOTS (2 cars)            ---- {} {} stacks",
                 (item.ratio * 80.0).round() as u32,
@@ -105,7 +105,7 @@ fn main() {
         }
 
         println!("======== ITEMS =========");
-        if env_args.contains(&"-f".to_owned()) {
+        if env_args.contains(&"-f".into()) {
             println!(
                 "40 SLOTS (1 car)             ---- {} {} items",
                 (item.ratio * 40.0).round() as u32 * item.ingredient.stack_size,
@@ -145,7 +145,7 @@ fn main() {
             item.ingredient.name
         );
 
-        if env_args.contains(&"-f".to_owned()) {
+        if env_args.contains(&"-f".into()) {
             println!(
                 "160 SLOTS (DC 4 cars)        ---- {} {} items",
                 (item.ratio * 160.0).round() as u32 * item.ingredient.stack_size,
