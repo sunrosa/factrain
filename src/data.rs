@@ -1,3 +1,7 @@
+/// Fetch from hand-written bindings the stack size of an item in the Factorio vanilla game from its in-game American English localized name. These bindings also include common colloquialisms.
+///
+/// # Returns
+/// If it is successful, it will return the stack size of the item as [Some]\(u32), if the stack size is not defined in this function, it will instead return [None].
 pub fn fetch_item_stack_size(item_name: &str) -> Option<u32> {
     match item_name {
         // Logistics
