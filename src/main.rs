@@ -57,8 +57,10 @@ fn main() {
     // Print calculated output.
     for item in item_ratios {
         println!(
-            "================ {} ({:.2}%) ================\n======== STACKS ========",
+            "================ {} x{}/{} ({:.2}%) ================\n======== STACKS ========",
             item.ingredient.name.to_uppercase(),
+            item.ingredient.amount,
+            item.ingredient.stack_size,
             item.ratio * 100.0
         );
 
@@ -243,10 +245,16 @@ fn prompt_items(
     let mut items: Vec<Ingredient> = Vec::new();
     for n in 1..(item_count + 1) {
         let item_name = prompt(rl, format!("Item {} name > ", n).as_str()).to_lowercase();
-        let item_amount = prompt_and_parse::<f64>(rl, format!("Item {} amount > ", n).as_str());
+        let item_amount = prompt_and_parse::<f64>(
+            rl,
+            format!("{} amount > ", item_name.to_uppercase()).as_str(),
+        );
         let item_stack_size = match fetch_item_stack_size(item_name.as_str()) {
             Some(stack_size) => stack_size,
-            None => prompt_and_parse::<u32>(rl, format!("Item {} stack size > ", n).as_str()),
+            None => prompt_and_parse::<u32>(
+                rl,
+                format!("{} stack size > ", item_name.to_uppercase()).as_str(),
+            ),
         };
         items.push(Ingredient {
             name: item_name,
