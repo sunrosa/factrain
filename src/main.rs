@@ -131,8 +131,9 @@ fn main() {
             );
 
             println!(
-                "120 SLOTS (DC 3 cars)        ---- {} items",
-                (item.ratio * 120.0).round() as u32 * item.ingredient.stack_size
+                "120 SLOTS (DC 3 cars)        ---- {} {} items",
+                (item.ratio * 120.0).round() as u32 * item.ingredient.stack_size,
+                item.ingredient.name
             );
         }
 
