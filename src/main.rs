@@ -45,10 +45,7 @@ fn main() {
         println!("DEBUG main()[total_stacks]: {:?}", total_stacks);
     }
 
-    // Items ratios as floats between 0 and 1. This number contains the "percentage" of the item desired.
-    // * 0: The name of the item.
-    // * 1: The ratio of the item.
-    // * 2: The stack size of the item.
+    // Calculate ingredient ratios.
     let mut item_ratios: Vec<IngredientRatio> = Vec::new();
     for item in &ingredients {
         item_ratios.push(IngredientRatio {
@@ -215,11 +212,11 @@ fn main() {
     }
 }
 
-/// Prompt through STDIN for user string input using rustyline `rl` with prompt `p`.
+/// Prompt through STDIN for user string input with a specified prompt. If the user presses CTRL-C or otherwise passes SIGINT, this function will terminate the process on the spot.
 ///
-/// # Arguments
-/// * `rl` - Rustyline [Editor](rustyline::Editor) used to read user's input.
-/// * `p` - User prompt given to the user to signal the need for input.
+/// # Parameters
+/// * `rl_editor` - Rustyline [Editor](rustyline::Editor) used to read user's input.
+/// * `user_prompt` - User prompt given to the user to signal the need for input.
 fn prompt(
     rl_editor: &mut rustyline::Editor<(), rustyline::history::FileHistory>,
     user_prompt: &str,
@@ -248,11 +245,11 @@ fn prompt(
     }
 }
 
-/// Prompt through STDIN for user string input using rustyline `rl` with prompt `p`.
+/// Prompt through STDIN for user string input with a specified prompt. Will return [Some]\(input) if the user provides input, or [None] if the user elects to press CTRL-C or otherwise pass SIGINT. This function will _NOT_ kill the running process if the user presses CTRl-C or passes SIGINT.
 ///
-/// # Arguments
-/// * `rl` - Rustyline [Editor](rustyline::Editor) used to read user's input.
-/// * `p` - User prompt given to the user to signal the need for input.
+/// # Parameters
+/// * `rl_editor` - Rustyline [Editor](rustyline::Editor) used to read user's input.
+/// * `user_prompt` - User prompt given to the user to signal the need for input.
 fn prompt_or_sigint(
     rl_editor: &mut rustyline::Editor<(), rustyline::history::FileHistory>,
     user_prompt: &str,
@@ -275,14 +272,14 @@ fn prompt_or_sigint(
     }
 }
 
-/// Prompt and parse through STDIN for user generic input using rustyline `rl` with prompt `p`. This function will repeat the prompt until a valid type is provided.
+/// Prompt and parse through STDIN for user generic input with a specified prompt. This function will repeat the prompt until a valid type is provided.
 ///
 /// # Generic parameters
 /// * `T` - The type to parse the user input into. This must implement [FromStr].
 ///
-/// # Arguments
-/// * `rl` - Rustyline [Editor](rustyline::Editor) used to read user's input.
-/// * `p` - User prompt given to the user to signal the need for input.
+/// # Parameters
+/// * `rl_editor` - Rustyline [Editor](rustyline::Editor) used to read user's input.
+/// * `user_prompt` - User prompt given to the user to signal the need for input.
 fn prompt_and_parse<T: FromStr<Err = impl Display>>(
     rl_editor: &mut rustyline::Editor<(), rustyline::history::FileHistory>,
     user_prompt: &str,
@@ -301,16 +298,10 @@ fn prompt_and_parse<T: FromStr<Err = impl Display>>(
     }
 }
 
-/// Prompt through STDIN for user integer input using rustyline `rl` with prompt `p`. This function will ask the user for the number of items they wish to list. Then, a looping prompt will ask them for the item name, item amount, and item stack size.
+/// Prompt the user for the ingredients they wish to calculate over.
 ///
-/// # Arguments
-/// * `rl` - Rustyline [Editor](rustyline::Editor) used to read user's input.
-///
-/// # Returns
-/// A [Vec] containing tuples containing:
-/// * __0__: The item's name. It does not have to match the item's name inside of Factorio. It is purely for reference.
-/// * __1__: The amount of the item used on the factory floor used in an arbitrary amount of time. This amount of time must be equal for all items referenced.
-/// * __2__: The item's stack size.
+/// # Parameters
+/// * `rl_editor` - Rustyline [Editor](rustyline::Editor) used to read user's input.
 fn prompt_ingredients(
     rl_editor: &mut rustyline::Editor<(), rustyline::history::FileHistory>,
 ) -> Vec<Ingredient> {
