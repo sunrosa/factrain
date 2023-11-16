@@ -91,6 +91,20 @@ fn main() {
 
             println!(
                 "{:<40}---- {} {} stacks",
+                "120 SLOTS (3 cars)",
+                (item.stack_ratio * 120.0).round() as u32,
+                item.ingredient.name
+            );
+
+            println!(
+                "{:<40}---- {} {} stacks",
+                "160 SLOTS (4 cars)",
+                (item.stack_ratio * 160.0).round() as u32,
+                item.ingredient.name
+            );
+
+            println!(
+                "{:<40}---- {} {} stacks",
                 "48 SLOTS (1 steel chest)",
                 (item.stack_ratio * 48.0).round() as u32,
                 item.ingredient.name
@@ -203,6 +217,21 @@ fn main() {
         );
 
         println!("{:=^80}", " INSERTERS ");
+        if env_args.contains(&"-f".into()) {
+            println!(
+                "{:<40}---- {} {} inserters",
+                "6 INSERTERS (6 steel chests)",
+                (item.ratio * 6.0).round() as u32,
+                item.ingredient.name
+            );
+            println!(
+                "{:<40}---- {} {} inserters",
+                "13 INSERTERS (13 steel chests)",
+                (item.ratio * 13.0).round() as u32,
+                item.ingredient.name
+            );
+        }
+
         println!(
             "{:<40}---- {} {} inserters",
             "27 INSERTERS (27 steel chests)",
