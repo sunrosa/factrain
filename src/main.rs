@@ -18,25 +18,25 @@ fn main() {
     }
 
     // Initialize Rustyline Editor in order to read user input lines.
-    let mut rl = rustyline::DefaultEditor::new().unwrap();
+    let mut rl_editor = rustyline::DefaultEditor::new().unwrap();
 
     // Prompt user for items to be calculated.
-    let items = prompt_items(&mut rl);
+    let ingredients = prompt_ingredients(&mut rl_editor);
 
     #[cfg(debug_assertions)]
     {
-        println!("DEBUG main()[items]: {:?}", items);
+        println!("DEBUG main()[items]: {:?}", ingredients);
     }
 
     // Total number of items specified in user-given amounts.
     let mut total_items = 0.0;
-    for item in &items {
+    for item in &ingredients {
         total_items += item.amount;
     }
 
     // Total item stacks specified in user-given amounts.
     let mut total_stacks = 0.0;
-    for item in &items {
+    for item in &ingredients {
         total_stacks += item.amount / item.stack_size as f64;
     }
 
@@ -50,7 +50,7 @@ fn main() {
     // * 1: The ratio of the item.
     // * 2: The stack size of the item.
     let mut item_ratios: Vec<IngredientRatio> = Vec::new();
-    for item in &items {
+    for item in &ingredients {
         item_ratios.push(IngredientRatio {
             ingredient: item.clone(),
             ratio: item.amount / total_items,
@@ -66,7 +66,7 @@ fn main() {
     // Print calculated output.
     for item in item_ratios {
         println!(
-            "{:=^64}",
+            "{:=^80}",
             format!(
                 " {} x{}/{} ({:.2}%) ",
                 item.ingredient.name.to_uppercase(),
@@ -76,7 +76,7 @@ fn main() {
             )
         );
 
-        println!("{:=^64}", " STACKS ");
+        println!("{:=^80}", " STACKS ");
         println!(
             "{:<40}---- {} {} stacks",
             "40 SLOTS (1 car)",
@@ -121,7 +121,7 @@ fn main() {
             );
         }
 
-        println!("{:=^64}", " ITEMS ");
+        println!("{:=^80}", " ITEMS ");
         if env_args.contains(&"-f".into()) {
             println!(
                 "{:<40}---- {} {} items",
@@ -205,7 +205,7 @@ fn main() {
             item.ingredient.name
         );
 
-        println!("{:=^64}", " INSERTERS ");
+        println!("{:=^80}", " INSERTERS ");
         println!(
             "{:<40}---- {} {} inserters",
             "27 INSERTERS (27 steel chests)",
@@ -220,9 +220,12 @@ fn main() {
 /// # Arguments
 /// * `rl` - Rustyline [Editor](rustyline::Editor) used to read user's input.
 /// * `p` - User prompt given to the user to signal the need for input.
-fn prompt(rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>, p: &str) -> String {
+fn prompt(
+    rl_editor: &mut rustyline::Editor<(), rustyline::history::FileHistory>,
+    user_prompt: &str,
+) -> String {
     loop {
-        let readline = rl.readline(p);
+        let readline = rl_editor.readline(user_prompt);
         match readline {
             Ok(line) => break line,
             Err(e) => match e {
@@ -251,11 +254,11 @@ fn prompt(rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>, p: &s
 /// * `rl` - Rustyline [Editor](rustyline::Editor) used to read user's input.
 /// * `p` - User prompt given to the user to signal the need for input.
 fn prompt_or_sigint(
-    rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>,
-    p: &str,
+    rl_editor: &mut rustyline::Editor<(), rustyline::history::FileHistory>,
+    user_prompt: &str,
 ) -> Option<String> {
     loop {
-        let readline = rl.readline(p);
+        let readline = rl_editor.readline(user_prompt);
         match readline {
             Ok(line) => break Some(line),
             Err(e) => match e {
@@ -281,11 +284,11 @@ fn prompt_or_sigint(
 /// * `rl` - Rustyline [Editor](rustyline::Editor) used to read user's input.
 /// * `p` - User prompt given to the user to signal the need for input.
 fn prompt_and_parse<T: FromStr<Err = impl Display>>(
-    rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>,
-    p: &str,
+    rl_editor: &mut rustyline::Editor<(), rustyline::history::FileHistory>,
+    user_prompt: &str,
 ) -> T {
     loop {
-        let input_string = prompt(rl, p);
+        let input_string = prompt(rl_editor, user_prompt);
         match input_string.parse::<T>() {
             Ok(t) => {
                 break t;
@@ -308,36 +311,40 @@ fn prompt_and_parse<T: FromStr<Err = impl Display>>(
 /// * __0__: The item's name. It does not have to match the item's name inside of Factorio. It is purely for reference.
 /// * __1__: The amount of the item used on the factory floor used in an arbitrary amount of time. This amount of time must be equal for all items referenced.
 /// * __2__: The item's stack size.
-fn prompt_items(
-    rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>,
+fn prompt_ingredients(
+    rl_editor: &mut rustyline::Editor<(), rustyline::history::FileHistory>,
 ) -> Vec<Ingredient> {
-    // Prompt for all of the items.
-    let mut items: Vec<Ingredient> = Vec::new();
+    // Prompt for all ingredients.
+    let mut ingredients: Vec<Ingredient> = Vec::new();
     loop {
-        let item_name =
-            match prompt_or_sigint(rl, format!("Item name (CTRL-C if done) > ").as_str()) {
+        let ingredient_name =
+            match prompt_or_sigint(rl_editor, format!("Item name (CTRL-C if done) > ").as_str()) {
                 Some(t) => t,
                 None => break,
             }
             .to_lowercase();
-        let item_amount = prompt_and_parse::<f64>(
-            rl,
-            format!("{} amount > ", item_name.to_uppercase()).as_str(),
+
+        let ingredient_amount = prompt_and_parse::<f64>(
+            rl_editor,
+            format!("{} amount > ", ingredient_name.to_uppercase()).as_str(),
         );
-        let item_stack_size = match data::fetch_item_stack_size(item_name.as_str()) {
+
+        let ingredient_stack_size = match data::fetch_item_stack_size(ingredient_name.as_str()) {
             Some(stack_size) => stack_size,
             None => prompt_and_parse::<u32>(
-                rl,
-                format!("{} stack size > ", item_name.to_uppercase()).as_str(),
+                rl_editor,
+                format!("{} stack size > ", ingredient_name.to_uppercase()).as_str(),
             ),
         };
-        items.push(Ingredient {
-            name: item_name,
-            amount: item_amount,
-            stack_size: item_stack_size,
+
+        ingredients.push(Ingredient {
+            name: ingredient_name,
+            amount: ingredient_amount,
+            stack_size: ingredient_stack_size,
         });
     }
-    items
+
+    ingredients
 }
 
 /// Ingredient as defined by the user.
