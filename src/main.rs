@@ -66,13 +66,17 @@ fn main() {
     // Print calculated output.
     for item in item_ratios {
         println!(
-            "================ {} x{}/{} ({:.2}%) ================\n======== STACKS ========",
-            item.ingredient.name.to_uppercase(),
-            item.ingredient.amount,
-            item.ingredient.stack_size,
-            item.stack_ratio * 100.0
+            "{:=^64}",
+            format!(
+                " {} x{}/{} ({:.2}%) ",
+                item.ingredient.name.to_uppercase(),
+                item.ingredient.amount,
+                item.ingredient.stack_size,
+                item.stack_ratio * 100.0
+            )
         );
 
+        println!("======== STACKS ========");
         println!(
             "40 SLOTS (1 car)             ---- {} {} stacks",
             (item.stack_ratio * 40.0).round() as u32,
