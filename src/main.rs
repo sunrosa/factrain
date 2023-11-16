@@ -28,7 +28,13 @@ fn main() {
         println!("DEBUG main()[items]: {:?}", items);
     }
 
-    // Total item stacks for averaging against. This number is what all items are divided by in order to get a unit rate.
+    // Total number of items specified in user-given amounts.
+    let mut total_items = 0.0;
+    for item in &items {
+        total_items += item.amount;
+    }
+
+    // Total item stacks specified in user-given amounts.
     let mut total_stacks = 0.0;
     for item in &items {
         total_stacks += item.amount / item.stack_size as f64;
@@ -47,7 +53,8 @@ fn main() {
     for item in &items {
         item_ratios.push(IngredientRatio {
             ingredient: item.clone(),
-            ratio: (item.amount / item.stack_size as f64) / total_stacks,
+            ratio: item.amount / total_items,
+            stack_ratio: (item.amount / item.stack_size as f64) / total_stacks,
         });
     }
 
@@ -63,43 +70,43 @@ fn main() {
             item.ingredient.name.to_uppercase(),
             item.ingredient.amount,
             item.ingredient.stack_size,
-            item.ratio * 100.0
+            item.stack_ratio * 100.0
         );
 
         println!(
             "40 SLOTS (1 car)             ---- {} {} stacks",
-            (item.ratio * 40.0).round() as u32,
+            (item.stack_ratio * 40.0).round() as u32,
             item.ingredient.name
         );
 
         if env_args.contains(&"-f".into()) {
             println!(
                 "80 SLOTS (2 cars)            ---- {} {} stacks",
-                (item.ratio * 80.0).round() as u32,
+                (item.stack_ratio * 80.0).round() as u32,
                 item.ingredient.name
             );
 
             println!(
                 "48 SLOTS (1 steel chest)     ---- {} {} stacks",
-                (item.ratio * 48.0).round() as u32,
+                (item.stack_ratio * 48.0).round() as u32,
                 item.ingredient.name
             );
 
             println!(
                 "288 SLOTS (6 steel chests)   ---- {} {} stacks",
-                (item.ratio * 288.0).round() as u32,
+                (item.stack_ratio * 288.0).round() as u32,
                 item.ingredient.name
             );
 
             println!(
                 "624 SLOTS (13 steel chests)  ---- {} {} stacks",
-                (item.ratio * 624.0).round() as u32,
+                (item.stack_ratio * 624.0).round() as u32,
                 item.ingredient.name
             );
 
             println!(
                 "1296 SLOTS (27 steel chests) ---- {} {} stacks",
-                (item.ratio * 1296.0).round() as u32,
+                (item.stack_ratio * 1296.0).round() as u32,
                 item.ingredient.name
             );
         }
@@ -108,72 +115,79 @@ fn main() {
         if env_args.contains(&"-f".into()) {
             println!(
                 "40 SLOTS (1 car)             ---- {} {} items",
-                (item.ratio * 40.0).round() as u32 * item.ingredient.stack_size,
+                (item.stack_ratio * 40.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
             );
 
             // "SC" refers to "same car" filtering. This requires each train car to follow the same filter.
             println!(
                 "80 SLOTS (SC 2 cars)         ---- {} {} items",
-                (item.ratio * 40.0).round() as u32 * item.ingredient.stack_size * 2,
+                (item.stack_ratio * 40.0).round() as u32 * item.ingredient.stack_size * 2,
                 item.ingredient.name
             );
 
             // "DC" refers to "different car" filtering. This allows each train car to follow their own unique filter.
             println!(
                 "80 SLOTS (DC 2 cars)         ---- {} {} items",
-                (item.ratio * 80.0).round() as u32 * item.ingredient.stack_size,
+                (item.stack_ratio * 80.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
             );
 
             println!(
                 "120 SLOTS (SC 3 cars)        ---- {} {} items",
-                (item.ratio * 40.0).round() as u32 * item.ingredient.stack_size * 3,
+                (item.stack_ratio * 40.0).round() as u32 * item.ingredient.stack_size * 3,
                 item.ingredient.name
             );
 
             println!(
                 "120 SLOTS (DC 3 cars)        ---- {} {} items",
-                (item.ratio * 120.0).round() as u32 * item.ingredient.stack_size,
+                (item.stack_ratio * 120.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
             );
         }
 
         println!(
             "160 SLOTS (SC 4 cars)        ---- {} {} items",
-            (item.ratio * 40.0).round() as u32 * item.ingredient.stack_size * 4,
+            (item.stack_ratio * 40.0).round() as u32 * item.ingredient.stack_size * 4,
             item.ingredient.name
         );
 
         if env_args.contains(&"-f".into()) {
             println!(
                 "160 SLOTS (DC 4 cars)        ---- {} {} items",
-                (item.ratio * 160.0).round() as u32 * item.ingredient.stack_size,
+                (item.stack_ratio * 160.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
             );
 
             println!(
                 "48 SLOTS (1 steel chest)     ---- {} {} items",
-                (item.ratio * 48.0).round() as u32 * item.ingredient.stack_size,
+                (item.stack_ratio * 48.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
             );
 
             println!(
                 "288 SLOTS (6 steel chests)   ---- {} {} items",
-                (item.ratio * 288.0).round() as u32 * item.ingredient.stack_size,
+                (item.stack_ratio * 288.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
             );
 
             println!(
                 "624 SLOTS (13 steel chests)  ---- {} {} items",
-                (item.ratio * 624.0).round() as u32 * item.ingredient.stack_size,
+                (item.stack_ratio * 624.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
             );
         }
 
         println!(
             "1296 SLOTS (27 steel chests) ---- {} {} items",
-            (item.ratio * 1296.0).round() as u32 * item.ingredient.stack_size,
+            (item.stack_ratio * 1296.0).round() as u32 * item.ingredient.stack_size,
+            item.ingredient.name
+        );
+
+        println!("====== INSERTERS =======");
+        println!(
+            "27 INSERTERS (27 steel chests) ---- {} {} inserters",
+            (item.ratio * 27.0).round() as u32,
             item.ingredient.name
         );
     }
@@ -298,6 +312,8 @@ struct Ingredient {
 struct IngredientRatio {
     /// Ingredient information.
     ingredient: Ingredient,
-    /// The ratio of the ingredient calculated to be needed. This takes stack size into account. This value is between 0 and 1.
+    /// The ratio of the ingredient calculated to be needed. This does _NOT_ take stack size into account. This value is between 0 and 1.
     ratio: f64,
+    /// The ratio of the ingredient calculated to be needed. This takes stack size into account. This value is between 0 and 1.
+    stack_ratio: f64,
 }
