@@ -245,6 +245,33 @@ fn prompt(rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>, p: &s
     }
 }
 
+/// Prompt through STDIN for user string input using rustyline `rl` with prompt `p`.
+///
+/// # Arguments
+/// * `rl` - Rustyline [Editor](rustyline::Editor) used to read user's input.
+/// * `p` - User prompt given to the user to signal the need for input.
+fn prompt_or_sigint(
+    rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>,
+    p: &str,
+) -> Option<String> {
+    loop {
+        let readline = rl.readline(p);
+        match readline {
+            Ok(line) => break Some(line),
+            Err(e) => match e {
+                rustyline::error::ReadlineError::Interrupted => {
+                    // If interrupt signal is caught (with CTRL-C), return as None.
+                    return None;
+                }
+                _ => {
+                    println!("Input error: {}", e);
+                    continue;
+                }
+            },
+        }
+    }
+}
+
 /// Prompt and parse through STDIN for user generic input using rustyline `rl` with prompt `p`. This function will repeat the prompt until a valid type is provided.
 ///
 /// # Generic parameters
@@ -284,20 +311,15 @@ fn prompt_and_parse<T: FromStr<Err = impl Display>>(
 fn prompt_items(
     rl: &mut rustyline::Editor<(), rustyline::history::FileHistory>,
 ) -> Vec<Ingredient> {
-    // Ask the user for the number of items they wish to be prompted for.
-    let item_count = loop {
-        let count = prompt_and_parse::<u32>(rl, "Item count > ");
-        if count == 0 {
-            println!("Item count must not be zero.");
-            continue;
-        }
-        break count;
-    };
-
     // Prompt for all of the items.
     let mut items: Vec<Ingredient> = Vec::new();
-    for n in 1..(item_count + 1) {
-        let item_name = prompt(rl, format!("Item {} name > ", n).as_str()).to_lowercase();
+    loop {
+        let item_name =
+            match prompt_or_sigint(rl, format!("Item name (CTRL-C if done) > ").as_str()) {
+                Some(t) => t,
+                None => break,
+            }
+            .to_lowercase();
         let item_amount = prompt_and_parse::<f64>(
             rl,
             format!("{} amount > ", item_name.to_uppercase()).as_str(),
