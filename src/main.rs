@@ -13,7 +13,7 @@ fn main() {
 
     let help_text = format!(
             "USAGE\n    {}\n\nOPTIONS\n    {:<16}{}\n    {:<16}{}\n    {:<16}{}\n    {:<16}{}\n    {:<16}{}\n    {:<16}{}\n    {:<16}{}\n    {:<16}{}",
-            "[sc/dc] [1-car/2-car/3-car/4-car] (extra)\n    Options can be passed in any order. You can combine any options together for additional output.",
+            "[sc/dc] [1-car/2-car/3-car/4-car] (extra)\n\n    Options can be passed in any order. You can combine any options together for additional output, as none of them are mutually exclusive.",
             "help",
             "Print this help output.",
             "1-car",
@@ -27,7 +27,7 @@ fn main() {
             "sc",
             "Same-car wagon filtering. Use this option to restrict each wagon (on one train) to same filter.",
             "dc",
-            "Different-car wagon filtering. Use this option if you wish for each wagon (on one train) to be free to choose its own individual filters.",
+            "Different-car wagon filtering. Use this option if you wish for each wagon (on one train) to be free to choose its own individual filter.",
             "extra",
             "Print some extras."
         );
@@ -39,7 +39,7 @@ fn main() {
     }
 
     if env_args.len() == 1 {
-        println!("You have not passed in any options. Pass options in following the name of the program as you execute it in your terminal (e.g. \"./factrain sc 4-car\" or \".\\factrain.exe sc 4-car\").\n");
+        println!("You have not passed in any options. Pass options in following the name of the program as you execute it in your terminal (e.g. \"./factrain sc 4-car\" on Linux or \".\\factrain.exe sc 4-car\" on Windows).\n");
         println!("{help_text}");
         return;
     }
