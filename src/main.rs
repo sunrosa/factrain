@@ -75,7 +75,7 @@ fn main() {
 
         println!("{:=^80}", " STACKS ");
         println!(
-            "{:<40}---- {} {} stacks",
+            "{:>40} ---- {} {} stacks",
             "40 SLOTS (1 car)",
             (item.stack_ratio * 40.0).round() as u32,
             item.ingredient.name
@@ -83,49 +83,49 @@ fn main() {
 
         if env_args.contains(&"-f".into()) {
             println!(
-                "{:<40}---- {} {} stacks",
+                "{:>40} ---- {} {} stacks",
                 "80 SLOTS (2 cars)",
                 (item.stack_ratio * 80.0).round() as u32,
                 item.ingredient.name
             );
 
             println!(
-                "{:<40}---- {} {} stacks",
+                "{:>40} ---- {} {} stacks",
                 "120 SLOTS (3 cars)",
                 (item.stack_ratio * 120.0).round() as u32,
                 item.ingredient.name
             );
 
             println!(
-                "{:<40}---- {} {} stacks",
+                "{:>40} ---- {} {} stacks",
                 "160 SLOTS (4 cars)",
                 (item.stack_ratio * 160.0).round() as u32,
                 item.ingredient.name
             );
 
             println!(
-                "{:<40}---- {} {} stacks",
+                "{:>40} ---- {} {} stacks",
                 "48 SLOTS (1 steel chest)",
                 (item.stack_ratio * 48.0).round() as u32,
                 item.ingredient.name
             );
 
             println!(
-                "{:<40}---- {} {} stacks",
+                "{:>40} ---- {} {} stacks",
                 "288 SLOTS (6 steel chests)",
                 (item.stack_ratio * 288.0).round() as u32,
                 item.ingredient.name
             );
 
             println!(
-                "{:<40}---- {} {} stacks",
+                "{:>40} ---- {} {} stacks",
                 "624 SLOTS (13 steel chests)",
                 (item.stack_ratio * 624.0).round() as u32,
                 item.ingredient.name
             );
 
             println!(
-                "{:<40}---- {} {} stacks",
+                "{:>40} ---- {} {} stacks",
                 "1296 SLOTS (27 steel chests)",
                 (item.stack_ratio * 1296.0).round() as u32,
                 item.ingredient.name
@@ -135,7 +135,7 @@ fn main() {
         println!("{:=^80}", " ITEMS ");
         if env_args.contains(&"-f".into()) {
             println!(
-                "{:<40}---- {} {} items",
+                "{:>40} ---- {} {} items",
                 "40 SLOTS (1 car)",
                 (item.stack_ratio * 40.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
@@ -143,7 +143,7 @@ fn main() {
 
             // "SC" refers to "same car" filtering. This requires each train car to follow the same filter.
             println!(
-                "{:<40}---- {} {} items",
+                "{:>40} ---- {} {} items",
                 "80 SLOTS (SC 2 cars)",
                 (item.stack_ratio * 40.0).round() as u32 * item.ingredient.stack_size * 2,
                 item.ingredient.name
@@ -151,21 +151,21 @@ fn main() {
 
             // "DC" refers to "different car" filtering. This allows each train car to follow their own unique filter.
             println!(
-                "{:<40}---- {} {} items",
+                "{:>40} ---- {} {} items",
                 "80 SLOTS (DC 2 cars)",
                 (item.stack_ratio * 80.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
             );
 
             println!(
-                "{:<40}---- {} {} items",
+                "{:>40} ---- {} {} items",
                 "120 SLOTS (SC 3 cars)",
                 (item.stack_ratio * 40.0).round() as u32 * item.ingredient.stack_size * 3,
                 item.ingredient.name
             );
 
             println!(
-                "{:<40}---- {} {} items",
+                "{:>40} ---- {} {} items",
                 "120 SLOTS (DC 3 cars)",
                 (item.stack_ratio * 120.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
@@ -173,7 +173,7 @@ fn main() {
         }
 
         println!(
-            "{:<40}---- {} {} items",
+            "{:>40} ---- {} {} items",
             "160 SLOTS (SC 4 cars)",
             (item.stack_ratio * 40.0).round() as u32 * item.ingredient.stack_size * 4,
             item.ingredient.name
@@ -181,28 +181,28 @@ fn main() {
 
         if env_args.contains(&"-f".into()) {
             println!(
-                "{:<40}---- {} {} items",
+                "{:>40} ---- {} {} items",
                 "160 SLOTS (DC 4 cars)",
                 (item.stack_ratio * 160.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
             );
 
             println!(
-                "{:<40}---- {} {} items",
+                "{:>40} ---- {} {} items",
                 "48 SLOTS (1 steel chest)",
                 (item.stack_ratio * 48.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
             );
 
             println!(
-                "{:<40}---- {} {} items",
+                "{:>40} ---- {} {} items",
                 "288 SLOTS (6 steel chests)",
                 (item.stack_ratio * 288.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
             );
 
             println!(
-                "{:<40}---- {} {} items",
+                "{:>40} ---- {} {} items",
                 "624 SLOTS (13 steel chests)",
                 (item.stack_ratio * 624.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
@@ -210,7 +210,7 @@ fn main() {
         }
 
         println!(
-            "{:<40}---- {} {} items",
+            "{:>40} ---- {} {} items",
             "1296 SLOTS (27 steel chests)",
             (item.stack_ratio * 1296.0).round() as u32 * item.ingredient.stack_size,
             item.ingredient.name
@@ -219,13 +219,13 @@ fn main() {
         println!("{:=^80}", " INSERTERS ");
         if env_args.contains(&"-f".into()) {
             println!(
-                "{:<40}---- {} {} inserters",
+                "{:>40} ---- {} {} inserters",
                 "6 INSERTERS (6 steel chests)",
                 (item.ratio * 6.0).round() as u32,
                 item.ingredient.name
             );
             println!(
-                "{:<40}---- {} {} inserters",
+                "{:>40} ---- {} {} inserters",
                 "13 INSERTERS (13 steel chests)",
                 (item.ratio * 13.0).round() as u32,
                 item.ingredient.name
@@ -233,7 +233,7 @@ fn main() {
         }
 
         println!(
-            "{:<40}---- {} {} inserters",
+            "{:>40} ---- {} {} inserters",
             "27 INSERTERS (27 steel chests)",
             (item.ratio * 27.0).round() as u32,
             item.ingredient.name
