@@ -11,9 +11,36 @@ fn main() {
         println!("DEBUG main()[env_args] {:?}", env_args);
     }
 
+    let help_text = format!(
+            "USAGE\n    {}\n\nOPTIONS\n    {:<16}{}\n    {:<16}{}\n    {:<16}{}\n    {:<16}{}\n    {:<16}{}\n    {:<16}{}\n    {:<16}{}\n    {:<16}{}",
+            "[sc/dc] [1-car/2-car/3-car/4-car] (extra)\n    Options can be passed in any order. You can combine any options together for additional output.",
+            "help",
+            "Print this help output.",
+            "1-car",
+            "One cargo wagon per train.",
+            "2-car",
+            "Two cargo wagons per train.",
+            "3-car",
+            "Three cargo wagons per train.",
+            "4-car",
+            "Four cargo wagons per train.",
+            "sc",
+            "Same-car wagon filtering. Use this option to restrict each wagon (on one train) to same filter.",
+            "dc",
+            "Different-car wagon filtering. Use this option if you wish for each wagon (on one train) to be free to choose its own individual filters.",
+            "extra",
+            "Print some extras."
+        );
+
     // Print help information if requested.
-    if env_args.contains(&"-h".into()) {
-        println!("-f    Print full output.\n-h    Print help.");
+    if env_args.contains(&"help".into()) {
+        println!("{help_text}");
+        return;
+    }
+
+    if env_args.len() == 1 {
+        println!("You have not passed in any options. Pass options in following the name of the program as you execute it in your terminal (e.g. \"./factrain sc 4-car\" or \".\\factrain.exe sc 4-car\").\n");
+        println!("{help_text}");
         return;
     }
 
@@ -74,56 +101,80 @@ fn main() {
         );
 
         println!("{:=^80}", " STACKS ");
-        println!(
-            "{:>40} ---- {} {} stacks",
-            "40 SLOTS (1 car)",
-            (item.stack_ratio * 40.0).round() as u32,
-            item.ingredient.name
-        );
 
-        if env_args.contains(&"-f".into()) {
+        if env_args.contains(&"1-car".into()) || env_args.contains(&"sc".into()) {
+            println!(
+                "{:>40} ---- {} {} stacks",
+                "40 SLOTS (1 car)",
+                (item.stack_ratio * 40.0).round() as u32,
+                item.ingredient.name
+            );
+        }
+
+        if env_args.contains(&"2-car".into()) && env_args.contains(&"dc".into()) {
             println!(
                 "{:>40} ---- {} {} stacks",
                 "80 SLOTS (2 cars)",
                 (item.stack_ratio * 80.0).round() as u32,
                 item.ingredient.name
             );
+        }
 
+        if env_args.contains(&"3-car".into()) && env_args.contains(&"dc".into()) {
             println!(
                 "{:>40} ---- {} {} stacks",
                 "120 SLOTS (3 cars)",
                 (item.stack_ratio * 120.0).round() as u32,
                 item.ingredient.name
             );
+        }
 
+        if env_args.contains(&"4-car".into()) && env_args.contains(&"dc".into()) {
             println!(
                 "{:>40} ---- {} {} stacks",
                 "160 SLOTS (4 cars)",
                 (item.stack_ratio * 160.0).round() as u32,
                 item.ingredient.name
             );
+        }
 
+        if env_args.contains(&"extra".into()) {
             println!(
                 "{:>40} ---- {} {} stacks",
                 "48 SLOTS (1 steel chest)",
                 (item.stack_ratio * 48.0).round() as u32,
                 item.ingredient.name
             );
+        }
 
+        if env_args.contains(&"1-car".into()) && env_args.contains(&"extra".into()) {
             println!(
                 "{:>40} ---- {} {} stacks",
                 "288 SLOTS (6 steel chests)",
                 (item.stack_ratio * 288.0).round() as u32,
                 item.ingredient.name
             );
+        }
 
+        if env_args.contains(&"2-car".into()) && env_args.contains(&"extra".into()) {
             println!(
                 "{:>40} ---- {} {} stacks",
                 "624 SLOTS (13 steel chests)",
                 (item.stack_ratio * 624.0).round() as u32,
                 item.ingredient.name
             );
+        }
 
+        if env_args.contains(&"3-car".into()) && env_args.contains(&"extra".into()) {
+            println!(
+                "{:>40} ---- {} {} stacks",
+                "960 SLOTS (20 steel chests)",
+                (item.stack_ratio * 960.0).round() as u32,
+                item.ingredient.name
+            );
+        }
+
+        if env_args.contains(&"4-car".into()) && env_args.contains(&"extra".into()) {
             println!(
                 "{:>40} ---- {} {} stacks",
                 "1296 SLOTS (27 steel chests)",
@@ -133,14 +184,17 @@ fn main() {
         }
 
         println!("{:=^80}", " ITEMS ");
-        if env_args.contains(&"-f".into()) {
+
+        if env_args.contains(&"1-car".into()) {
             println!(
                 "{:>40} ---- {} {} items",
                 "40 SLOTS (1 car)",
                 (item.stack_ratio * 40.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
             );
+        }
 
+        if env_args.contains(&"2-car".into()) && env_args.contains(&"sc".into()) {
             // "SC" refers to "same car" filtering. This requires each train car to follow the same filter.
             println!(
                 "{:>40} ---- {} {} items",
@@ -148,7 +202,9 @@ fn main() {
                 (item.stack_ratio * 40.0).round() as u32 * item.ingredient.stack_size * 2,
                 item.ingredient.name
             );
+        }
 
+        if env_args.contains(&"2-car".into()) && env_args.contains(&"dc".into()) {
             // "DC" refers to "different car" filtering. This allows each train car to follow their own unique filter.
             println!(
                 "{:>40} ---- {} {} items",
@@ -156,14 +212,18 @@ fn main() {
                 (item.stack_ratio * 80.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
             );
+        }
 
+        if env_args.contains(&"3-car".into()) && env_args.contains(&"sc".into()) {
             println!(
                 "{:>40} ---- {} {} items",
                 "120 SLOTS (SC 3 cars)",
                 (item.stack_ratio * 40.0).round() as u32 * item.ingredient.stack_size * 3,
                 item.ingredient.name
             );
+        }
 
+        if env_args.contains(&"3-car".into()) && env_args.contains(&"dc".into()) {
             println!(
                 "{:>40} ---- {} {} items",
                 "120 SLOTS (DC 3 cars)",
@@ -172,35 +232,43 @@ fn main() {
             );
         }
 
-        println!(
-            "{:>40} ---- {} {} items",
-            "160 SLOTS (SC 4 cars)",
-            (item.stack_ratio * 40.0).round() as u32 * item.ingredient.stack_size * 4,
-            item.ingredient.name
-        );
+        if env_args.contains(&"4-car".into()) && env_args.contains(&"sc".into()) {
+            println!(
+                "{:>40} ---- {} {} items",
+                "160 SLOTS (SC 4 cars)",
+                (item.stack_ratio * 40.0).round() as u32 * item.ingredient.stack_size * 4,
+                item.ingredient.name
+            );
+        }
 
-        if env_args.contains(&"-f".into()) {
+        if env_args.contains(&"4-car".into()) && env_args.contains(&"dc".into()) {
             println!(
                 "{:>40} ---- {} {} items",
                 "160 SLOTS (DC 4 cars)",
                 (item.stack_ratio * 160.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
             );
+        }
 
+        if env_args.contains(&"extra".into()) {
             println!(
                 "{:>40} ---- {} {} items",
                 "48 SLOTS (1 steel chest)",
                 (item.stack_ratio * 48.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
             );
+        }
 
+        if env_args.contains(&"1-car".into()) {
             println!(
                 "{:>40} ---- {} {} items",
                 "288 SLOTS (6 steel chests)",
                 (item.stack_ratio * 288.0).round() as u32 * item.ingredient.stack_size,
                 item.ingredient.name
             );
+        }
 
+        if env_args.contains(&"2-car".into()) {
             println!(
                 "{:>40} ---- {} {} items",
                 "624 SLOTS (13 steel chests)",
@@ -209,21 +277,36 @@ fn main() {
             );
         }
 
-        println!(
-            "{:>40} ---- {} {} items",
-            "1296 SLOTS (27 steel chests)",
-            (item.stack_ratio * 1296.0).round() as u32 * item.ingredient.stack_size,
-            item.ingredient.name
-        );
+        if env_args.contains(&"3-car".into()) {
+            println!(
+                "{:>40} ---- {} {} items",
+                "960 SLOTS (20 steel chests)",
+                (item.stack_ratio * 960.0).round() as u32 * item.ingredient.stack_size,
+                item.ingredient.name
+            );
+        }
+
+        if env_args.contains(&"4-car".into()) {
+            println!(
+                "{:>40} ---- {} {} items",
+                "1296 SLOTS (27 steel chests)",
+                (item.stack_ratio * 1296.0).round() as u32 * item.ingredient.stack_size,
+                item.ingredient.name
+            );
+        }
 
         println!("{:=^80}", " INSERTERS ");
-        if env_args.contains(&"-f".into()) {
+
+        if env_args.contains(&"1-car".into()) {
             println!(
                 "{:>40} ---- {} {} inserters",
                 "6 INSERTERS (6 steel chests)",
                 (item.ratio * 6.0).round() as u32,
                 item.ingredient.name
             );
+        }
+
+        if env_args.contains(&"2-car".into()) {
             println!(
                 "{:>40} ---- {} {} inserters",
                 "13 INSERTERS (13 steel chests)",
@@ -232,12 +315,23 @@ fn main() {
             );
         }
 
-        println!(
-            "{:>40} ---- {} {} inserters",
-            "27 INSERTERS (27 steel chests)",
-            (item.ratio * 27.0).round() as u32,
-            item.ingredient.name
-        );
+        if env_args.contains(&"3-car".into()) {
+            println!(
+                "{:>40} ---- {} {} inserters",
+                "20 INSERTERS (20 steel chests)",
+                (item.ratio * 20.0).round() as u32,
+                item.ingredient.name
+            );
+        }
+
+        if env_args.contains(&"4-car".into()) {
+            println!(
+                "{:>40} ---- {} {} inserters",
+                "27 INSERTERS (27 steel chests)",
+                (item.ratio * 27.0).round() as u32,
+                item.ingredient.name
+            );
+        }
     }
 }
 
